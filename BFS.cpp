@@ -45,7 +45,18 @@ void BFS(int s)
         color[u] = "BLACK";
     }
 }
-
+void Print_path(int s, int v)
+{
+    if (v == s)
+        printf("%d", s);
+    else if (pre[v] == -1)
+        printf("No Path\n");
+    else
+    {
+        Print_path(s, pre[v]);
+        printf("%d", v);
+    }
+}
 int main()
 {
     int n, m;
