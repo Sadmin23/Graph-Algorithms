@@ -3,6 +3,7 @@
 using namespace std;
 
 #define N 100
+#define INF INT_MAX
 
 vector<int> adj[N];
 string color[N];
@@ -11,10 +12,10 @@ int d[N];
 
 void BFS(int s)
 {
-    for (auto u : adj[s])
+    for (int u = 0; u < N; u++)
     {
         color[u] = "WHITE";
-        d[u] = INT_MAX;
+        d[u] = INF;
         pre[u] = -1;
     }
 
