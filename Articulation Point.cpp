@@ -10,26 +10,35 @@ string color[N];
 int pre[N];
 int d[N];
 int f[N];
+int low[N];
 int timing;
 
-void DFS_Visit(int u)
-{
-    color[u] = "GRAY";
-    timing = timing + 1;
-    d[u] = timing;
+vector<int> arti_pt;
 
-    for (auto v : adj[u])
+void DFS_Visit(int v)
+{
+    color[v] = "GRAY";
+    timing = timing + 1;
+    d[v] = timing;
+    low[v] = d[v];
+
+    for (auto w : adj[v])
     {
-        if (color[v] == "WHITE")
+        if (color[w] == "WHITE")
         {
-            pre[v] = u;
-            DFS_Visit(v);
+            pre[w] = v;
+            DFS_Visit(w);
+
+            if (low[w] >= d[v])
+                arti_pt.push_back(v);
+            if (low[w] < low[v])
+                low[v] = low[w];
         }
     }
 
-    color[u] = "BLACK";
+    color[v] = "BLACK";
     timing = timing + 1;
-    f[u] = timing;
+    f[v] = timing;
 }
 void DFS()
 {
@@ -39,6 +48,7 @@ void DFS()
         pre[u] = -1;
         f[u] = INF;
         d[u] = INF;
+        low[u] = INF;
     }
 
     timing = 0;
