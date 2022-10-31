@@ -13,7 +13,7 @@ int f[N];
 int low[N];
 int timing;
 
-vector<int> arti_pt;
+vector<pair<int, int>> bridge;
 
 void DFS_Visit(int v)
 {
@@ -29,8 +29,8 @@ void DFS_Visit(int v)
             pre[w] = v;
             DFS_Visit(w);
 
-            if (low[w] >= d[v])
-                arti_pt.push_back(v);
+            if (low[w] > d[v])
+                bridge.push_back({v, w});
             if (low[w] < low[v])
                 low[v] = low[w];
         }
