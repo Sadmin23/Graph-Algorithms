@@ -13,34 +13,24 @@ int f[N];
 int low[N];
 int time;
 
-void DFS_Visit(int v)
+void DFS_Visit(int u)
 {
-    color[v] = "GRAY";
+    color[u] = "GRAY";
     time = time + 1;
-    d[v] = time;
-    low[v] = d[v];
+    d[u] = time;
 
-    for (auto w : adj[v])
+    for (auto v : adj[u])
     {
-        if (color[w] == "WHITE")
+        if (color[v] == "WHITE")
         {
-            pre[w] = v;
-            DFS_Visit(w);
-            if (low[w] >= d[v])
-                ; // record articulation point
-            if (low[w] < low[v])
-                low[v] = low[w];
-        }
-        else if (pre[v] != w)
-        {
-            if (d[w] < low[v])
-                low[v] = d[w];
+            pre[v] = u;
+            DFS_Visit(v);
         }
     }
 
-    color[v] = "BLACK";
-    time++;
-    f[v] = time;
+    color[u] = "BLACK";
+    time = time + 1;
+    f[u] = time;
 }
 void DFS()
 {
@@ -48,7 +38,6 @@ void DFS()
     {
         color[u] = "WHITE";
         pre[u] = -1;
-        low[u] = INF;
         f[u] = INF;
         d[u] = INF;
     }
