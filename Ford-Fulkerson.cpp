@@ -1,85 +1,101 @@
-// Ford-Fulkerson algorith in C++
 #include <bits/stdc++.h>
 
 using namespace std;
 
-#define V 6
+#define N 100
+#define INF INT_MAX
 
-// Using BFS as a searching algorithm
-bool bfs(int rGraph[V][V], int s, int t, int parent[])
+int cap[N][N];
+vector<int> adj[N];
+int pre[N];
+
+void init()
 {
-    bool visited[V];
-    memset(visited, 0, sizeof(visited));
+    for (int i = 0; i < N; i++)
+    {
+        pre[i] = -1;
 
-    queue<int> q;
-    q.push(s);
-    visited[s] = true;
-    parent[s] = -1;
+        for (int j = 0; j < N; j++)
+        {
+            cap[i][j] = 0;
+        }
+    }
+}
+int bfs(int s, int t)
+{
+    for (int i = 0; i < N; i++)
+        pre[i] = -1;
+
+    pre[s] = -2;
+    queue<pair<int, int>> q;
+    q.push({s, INF});
 
     while (!q.empty())
     {
-        int u = q.front();
+        int cur = q.front().first;
+        int flo = q.front().second;
         q.pop();
 
-        for (int v = 0; v < V; v++)
+        for (auto v : adj[cur])
         {
-            if (visited[v] == false && rGraph[u][v] > 0)
+            if (pre[v] == -1 && cap[cur][v])
             {
-                q.push(v);
-                parent[v] = u;
-                visited[v] = true;
+                pre[v] = cur;
+
+                int flo2 = min(flo, cap[cur][v]);
+
+                if (v == t)
+                    return flo2;
+                q.push({v, flo2});
             }
         }
     }
 
-    return (visited[t] == true);
+    return 0;
 }
-
-// Applying fordfulkerson algorithm
-int fordFulkerson(int graph[V][V], int s, int t)
+int maxflow(int s, int t)
 {
-    int u, v;
+    int flow = 0;
+    int flow2;
 
-    int rGraph[V][V];
-    for (u = 0; u < V; u++)
-        for (v = 0; v < V; v++)
-            rGraph[u][v] = graph[u][v];
-
-    int parent[V];
-    int max_flow = 0;
-
-    // Updating the residual values of edges
-    while (bfs(rGraph, s, t, parent))
+    while (flow2 = bfs(s, t))
     {
-        int path_flow = INT_MAX;
-        for (v = t; v != s; v = parent[v])
-        {
-            u = parent[v];
-            path_flow = min(path_flow, rGraph[u][v]);
-        }
+        // cout << flow2 << "\n";
 
-        for (v = t; v != s; v = parent[v])
-        {
-            u = parent[v];
-            rGraph[u][v] -= path_flow;
-            rGraph[v][u] += path_flow;
-        }
+        flow += flow2;
+        int cur = t;
 
-        // Adding the path flows
-        max_flow += path_flow;
+        while (cur != s)
+        {
+            int previous = pre[cur];
+            cap[previous][cur] -= flow2;
+            cap[cur][previous] += flow2;
+            cur = previous;
+        }
     }
 
-    return max_flow;
+    return flow;
 }
-
 int main()
 {
-    int graph[V][V] = {{0, 8, 0, 0, 3, 0},
-                       {0, 0, 9, 0, 0, 0},
-                       {0, 0, 0, 0, 7, 2},
-                       {0, 0, 0, 0, 0, 5},
-                       {0, 0, 7, 4, 0, 0},
-                       {0, 0, 0, 0, 0, 0}};
+    init();
 
-    cout << "Max Flow: " << fordFulkerson(graph, 0, 5) << endl;
+    freopen("input2.txt", "r", stdin);
+
+    int n, m;
+    cin >> n >> m;
+
+    for (int i = 0; i < m; i++)
+    {
+        int x, y, z;
+        cin >> x >> y >> z;
+
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+        cap[x][y] = z;
+    }
+
+    cout << maxflow(0, n - 1) << "\n";
+
+    return 0;
 }
