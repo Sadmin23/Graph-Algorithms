@@ -10,29 +10,43 @@ string color[N];
 int pre[N];
 int d[N];
 int f[N];
+int low[N];
 int flag[N];
 int timing;
 
+vector<int> arti_pt;
+
 vector<int> v;
 
-void DFS_Visit(int u)
+void DFS_Visit(int v)
 {
-    color[u] = "GRAY";
+    color[v] = "GRAY";
     timing = timing + 1;
-    d[u] = timing;
+    d[v] = timing;
+    low[v] = d[v];
 
-    for (auto v : adj[u])
+    for (auto w : adj[v])
     {
-        if (color[v] == "WHITE")
+        if (color[w] == "WHITE")
         {
-            pre[v] = u;
-            DFS_Visit(v);
+            pre[w] = v;
+            DFS_Visit(w);
+
+            if (low[w] >= d[v])
+                arti_pt.push_back(v);
+            if (low[w] < low[v])
+                low[v] = low[w];
+        }
+        else if (pre[v] != w)
+        {
+            if (d[w] < low[v])
+                low[v] = d[w];
         }
     }
 
-    color[u] = "BLACK";
+    color[v] = "BLACK";
     timing = timing + 1;
-    f[u] = timing;
+    f[v] = timing;
 }
 void DFS()
 {
@@ -42,6 +56,7 @@ void DFS()
         pre[u] = -1;
         f[u] = INF;
         d[u] = INF;
+        low[u] = INF;
     }
 
     timing = 0;
@@ -54,12 +69,10 @@ void DFS()
 }
 int main()
 {
-    freopen("D.txt", "r", stdin);
+    freopen("F.txt", "r", stdin);
 
     int n, m;
     cin >> n >> m;
-
-    memset(flag, 0, sizeof(flag));
 
     for (int i = 0; i < m; i++)
     {
@@ -76,12 +89,21 @@ int main()
             v.push_back(y);
             flag[y] = 1;
         }
+
         adj[x].push_back(y);
         adj[y].push_back(x);
     }
 
     DFS();
 
-    for (int i = 0; i < v.size(); i++)
-        cout << v[i] << " " << d[v[i]] << " " << f[v[i]] << "\n";
+    // for (int i = 0; i < v.size(); i++)
+    // {
+    //     int x = v[i];
+
+    //     cout << x << " " << d[x] << " " << f[x] << " " << low[x] << "\n";
+    // }
+    for (int i = 0; i < arti_pt.size(); i++)
+        cout << arti_pt[i] << " ";
+
+    puts("");
 }

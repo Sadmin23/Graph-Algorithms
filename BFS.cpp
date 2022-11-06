@@ -59,6 +59,8 @@ void Print_path(int s, int v)
 }
 int main()
 {
+    freopen("C.txt", "r", stdin);
+
     int n, m;
     cin >> n >> m;
 
@@ -70,4 +72,8 @@ int main()
         adj[x].push_back(y);
         adj[y].push_back(x);
     }
+
+    BFS(1);
+
+    Print_path(1, 6);
 }

@@ -11,9 +11,12 @@ int pre[N];
 int d[N];
 int f[N];
 int low[N];
+int flag[N];
 int timing;
 
 vector<pair<int, int>> bridge;
+
+vector<int> v;
 
 void DFS_Visit(int v)
 {
@@ -66,6 +69,8 @@ void DFS()
 }
 int main()
 {
+    freopen("F.txt", "r", stdin);
+
     int n, m;
     cin >> n >> m;
 
@@ -74,7 +79,23 @@ int main()
         int x, y;
         cin >> x >> y;
 
+        if (flag[x] == 0)
+        {
+            v.push_back(x);
+            flag[x] = 1;
+        }
+        if (flag[y] == 0)
+        {
+            v.push_back(y);
+            flag[y] = 1;
+        }
+
         adj[x].push_back(y);
         adj[y].push_back(x);
     }
+
+    DFS();
+
+    for (int i = 0; i < bridge.size(); i++)
+        cout << bridge[i].first << " " << bridge[i].second << "\n";
 }
