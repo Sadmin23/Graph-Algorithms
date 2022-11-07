@@ -69,7 +69,7 @@ void DFS()
 }
 int main()
 {
-    freopen("F.txt", "r", stdin);
+    freopen("H.txt", "r", stdin);
 
     int n, m;
     cin >> n >> m;
