@@ -2,10 +2,11 @@
 
 using namespace std;
 
-#define MAX 100000
-#define INF 999
+#define MAX 100
+#define INF INT_MAX
 
 int dist[MAX];
+int pre[MAX];
 
 struct edge
 {
@@ -18,16 +19,27 @@ typedef struct edge edge;
 
 vector<edge> edgelist;
 
-void init(int n)
+void init(int s, int n)
 {
     for (int i = 1; i <= n; i++)
+    {
         dist[i] = INF;
-}
-void bellman_ford(int x, int n)
-{
-    init(n);
+        pre[i] = -1;
+    }
 
-    dist[x] = 0;
+    dist[s] = 0;
+}
+void relax(int u, int v, int w)
+{
+    if (dist[v] > dist[u] + w)
+    {
+        dist[v] = dist[u] + w;
+        pre[v] = u;
+    }
+}
+bool bellman_ford(int x, int n)
+{
+    init(x, n);
 
     for (int i = 1; i <= n - 1; i++)
     {
@@ -39,9 +51,22 @@ void bellman_ford(int x, int n)
             b = e.v;
             c = e.w;
 
-            dist[b] = min(dist[b], dist[a] + c);
+            relax(a, b, c);
         }
     }
+    for (auto e : edgelist)
+    {
+        int a, b, c;
+
+        a = e.u;
+        b = e.v;
+        c = e.w;
+
+        if (dist[b] > dist[a] + c)
+            return false;
+    }
+
+    return true;
 }
 int main()
 {
@@ -61,10 +86,11 @@ int main()
         edgelist.push_back({y, x, z});
     }
 
-    bellman_ford(1, n);
-
-    for (int i = 1; i <= n; i++)
-        printf("%d: %d\n", i, dist[i]);
+    if (bellman_ford(1, n))
+    {
+        for (int i = 1; i <= n; i++)
+            printf("%d: %d\n", i, dist[i]);
+    }
 
     return 0;
 }
