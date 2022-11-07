@@ -75,5 +75,10 @@ int main()
     for (int i = 1; i <= n; i++)
         printf("%d: %d\n", i, dist[i]);
 
+    dijkstra(2);
+
+    for (int i = 1; i <= n; i++)
+        printf("%d: %d\n", i, dist[i]);
+
     return 0;
 }
