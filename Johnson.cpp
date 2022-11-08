@@ -155,7 +155,7 @@ void Johnson(int m)
 
             for (int j = 0; j < n; j++)
                 // printf("%d ", dist2[j]);
-                printf("%d ", dist2[j] + dist[i] - dist[j]);
+                printf("%d ", dist2[j]);
 
             puts("");
         }
