@@ -96,12 +96,15 @@ int main()
 
     DFS();
 
-    // for (int i = 0; i < v.size(); i++)
-    // {
-    //     int x = v[i];
+    for (int i = 0; i < v.size(); i++)
+    {
+        int x = v[i];
 
-    //     cout << x << " " << d[x] << " " << f[x] << " " << low[x] << "\n";
-    // }
+        cout << x << " " << d[x] << " " << f[x] << " " << low[x] << "\n";
+    }
+
+    puts("");
+
     for (int i = 0; i < arti_pt.size(); i++)
         cout << arti_pt[i] << " ";
 
